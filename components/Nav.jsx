@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
 
 function Nav() {
-  const userLoggedIn = true
+  const { data : session } = useSession()
   const [ providers, setProviders ] = useState(null);
   const [ toggleDropDown, setToggleDropDown ] = useState(false);
 
@@ -31,7 +31,7 @@ function Nav() {
       </Link>
       {/* Desktop navigation */}
       <div className="flex max-sm:hidden">
-        {userLoggedIn ? 
+        {session?.user ? 
           (
             <div className="flex gap-3 mx-md:gap-5">
               <Link href="/create-prompt" className="black_btn">
@@ -44,7 +44,7 @@ function Nav() {
               </button>
               <Link href="/profile">
                 <Image
-                  src="/assets/images/logo.svg"
+                  src = {session?.user ? session?.user.image : "/assets/images/logo.svg"}
                   width={37}
                   height={37}
                   className="rounded-full"
@@ -69,9 +69,9 @@ function Nav() {
       </div>
       {/* mobile navigation */}
       <div className="sm:hidden flex relative">
-        {userLoggedIn && <div className="flex">
+        {session?.user && <div className="flex">
           <Image
-             src="/assets/images/logo.svg"
+            src = {session?.user ? session?.user.image : "/assets/images/logo.svg"}
              width={37}
              height={37}
              className="rounded-full"
@@ -107,8 +107,7 @@ function Nav() {
              </div>
           }
         </div> }
-
-        {!userLoggedIn && Object.values(providers).map(prov => (
+        {!session?.user && providers && Object.values(providers).map(prov => (
                 <button
                 type="button"
                 key={providers.name}

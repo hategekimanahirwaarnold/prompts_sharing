@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation'
 
@@ -41,13 +41,15 @@ function MyProfile() {
       }
     }
   return (
-    <Profile
-      name="My"
-      description="Welcome to your personalized profile page"
-      data={posts}
-      handleEdit={handleEdit}
-      handleDelete={handleDelete}
-    />
+    <Suspense>
+      <Profile
+        name="My"
+        description="Welcome to your personalized profile page"
+        data={posts}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
+    </Suspense>
   )
 }
 

@@ -4,7 +4,11 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
 
-function PromptCard({ post, handleTagClick, handleEdig, handleDelete }) {
+function PromptCard({ post, handleClick, handleEdit, handleDelete }) {
+  const { data: session } = useSession();
+  const pathName = usePathname();
+  const router = useRouter();
+
   const [ copied, setCopied ] = useState("")
   const handleCopy = () => {
     setCopied(post.prompt);
@@ -37,13 +41,28 @@ function PromptCard({ post, handleTagClick, handleEdig, handleDelete }) {
             }
             width={12}
             height={12}
+            alt="copy_image"
           />
         </div>
       </div>
       <p className="my-4 font-satoshi text-sm txt-gray-700">{post.prompt}</p>
       <p className="font-inter text-sm blue_gradient cursor-pointer"
-        onClick = {() => handleTagClick && handleTagClick(post.tag) }
-      >{post.tag}</p>
+        onClick = {() => handleClick && handleClick(post.tag) }
+      >#{post.tag}</p>
+      {session?.user.id === post.creator._id && pathName === '/profile' 
+      && <div className="mt-5 flex-center gap-4 border-t border-gray-100 pt-3">
+          <p className="font-inter text-sm green_gradient cursor-pointer"
+            onClick={handleEdit}
+          >
+            Edit
+          </p>
+          <p className="font-inter text-sm orange_gradient cursor-pointer"
+            onClick={handleDelete}
+          >
+            Delete
+          </p>
+        </div>
+      }
     </div>
   )
 }

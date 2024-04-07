@@ -57,7 +57,7 @@ function Nav() {
               {providers && Object.values(providers).map(prov => (
                 <button
                 type="button"
-                key={providers.name}
+                key={providers.id}
                 onClick={() => signIn(prov.id)}
                 className="black_btn"
                 >
